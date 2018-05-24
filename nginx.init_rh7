@@ -1,0 +1,15 @@
+[Unit]
+Description=The NGINX HTTP and reverse proxy server
+After=syslog.target network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=forking
+#PIDFile=/opt/nginx/nginx.pid  nginx中已经定义了nginx.pid，无需此项，且存在权限问题。
+ExecStartPre=/opt/nginx/sbin/nginx -t
+ExecStart=/opt/nginx/sbin/nginx -c /opt/nginx/conf/nginx.conf
+ExecReload=/opt/nginx/sbin/nginx -s reload
+ExecStop=/usr/bin/kill -s QUIT $MAINPID
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
